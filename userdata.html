@@ -282,7 +282,7 @@
                 errorsDiv.scrollIntoView({behavior: 'smooth'});
             } else {
                 const messageToConfirm = "Is everything correct:" +
-                    `\n${firstNameInput.value} ${firstNameInput.value}\nPassport: ${passportNumberInput.value}\nEmail: ${emailInput.value}\nPhone: ${phoneInput.value}`;
+                    `\n${firstNameInput.value} ${lastNameInput.value}\nPassport: ${passportNumberInput.value}\nEmail: ${emailInput.value}\nPhone: ${phoneInput.value}`;
                 window.Telegram.WebApp.showConfirm(messageToConfirm, (confirmed) => {
                     if (confirmed === true) {
                         const jsonData = {
