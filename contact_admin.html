@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="MobileOptimized" content="176"/>
+    <meta name="HandheldFriendly" content="True"/>
+    <meta name="robots" content="noindex,nofollow"/>
+    <title></title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            --bg-color: var(--tg-theme-bg-color, #fff);
+            font-family: sans-serif;
+            background-color: var(--bg-color);
+            color: var(--tg-theme-text-color, #222);
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+            color-scheme: var(--tg-color-scheme);
+        }
+
+        a {
+            color: var(--tg-theme-link-color, #2678b6);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            font-size: 14px;
+            margin: 15px 0;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            background-color: var(--tg-theme-button-color, #50a8eb);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            cursor: pointer;
+        }
+
+        .main-container p {
+            margin: 0 0 10px;
+        }
+
+        .main-container pre,
+        .main-container > .btn {
+            margin: 0 0 7px;
+        }
+
+        button[disabled] {
+            opacity: 0.6;
+            cursor: auto;
+            pointer-events: none;
+        }
+
+        input[type="text"],
+        .input[contenteditable] {
+            display: block;
+            box-sizing: border-box;
+            font-size: 14px;
+            width: 100%;
+            padding: 12px 20px;
+            margin: 15px 0;
+            border: 1px solid var(--tg-theme-link-color, #000);
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            border-radius: 4px;
+            color: var(--tg-theme-text-color, #222222);
+            text-align: start;
+        }
+
+        input[type="text"]::-webkit-input-placeholder {
+            color: var(--tg-theme-hint-color, #ccc);
+        }
+
+        input[type="text"]::-moz-placeholder {
+            color: var(--tg-theme-hint-color, #ccc);
+        }
+
+        input[type="text"]:-ms-input-placeholder {
+            color: var(--tg-theme-hint-color, #ccc);
+        }
+
+        section {
+            padding: 15px;
+            text-align: left;
+            background-color: var(--bg-color, #ffffff);
+        }
+
+        section#top_sect {
+            background-color: var(--tg-theme-bg-color, #ffffff);
+        }
+
+        section#top_sect.second {
+            background-color: var(--tg-theme-secondary-bg-color, #efefef);
+        }
+
+        section + section {
+            padding: 0 15px 65px;
+        }
+
+        p {
+            margin: 40px 0 15px;
+        }
+
+        ul {
+            text-align: left;
+        }
+
+        li {
+            color: var(--tg-theme-hint-color, #a8a8a8);
+        }
+
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 7px;
+        }
+
+        pre {
+            background: rgba(0, 0, 0, .07);
+            color: var(--tg-theme-text-color, #222);
+            font-size: 12px;
+            border: none;
+            border-radius: 4px;
+            padding: 8px;
+            margin: 7px 0;
+            word-break: break-word;
+            white-space: pre-wrap;
+            text-align: left;
+        }
+
+        .dark pre {
+            background: rgba(255, 255, 255, .15);
+        }
+
+        .columns > * {
+            flex-grow: 1;
+        }
+
+        .viewport-container .main-container {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .viewport-container .main-container button {
+            width: auto;
+        }
+
+        small {
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body class="" style="visibility: hidden;">
+
+<section id="top_sect" class="second">
+    <h4>Please let us know if anything wrong</h4>
+
+    <form name="contact" id="contact">
+        <label for="username">User:</label>
+        <input type="text" id="username" name="username" readonly="readonly">
+
+        <label for="message">Message (maximum 1000 symbols):</label>
+        <textarea id="message" name="message" rows="4" maxlength="1000"></textarea>
+    </form>
+</section>
+
+<script type="application/javascript">
+    const urlParams = new URLSearchParams(window.location.search);
+    const first_name = urlParams.get('first_name');
+    const last_name = urlParams.get('last_name');
+    const username = urlParams.get('username');
+
+    document.getElementById('username').value = `${first_name} ${last_name} (${username})`;
+
+    const RKTermin = {
+        initData: Telegram.WebApp.initData || '',
+        MainButton: Telegram.WebApp.MainButton,
+
+        init(options) {
+            document.body.style.visibility = '';
+            Telegram.WebApp.ready();
+            Telegram.WebApp.MainButton.setParams({
+                text: 'Submit',
+                is_visible: true
+            }).onClick(RKTermin.submit);
+            Telegram.WebApp.MainButton.show();
+            Telegram.WebApp.expand();
+        },
+        submit() {
+            const message = document.querySelector('#message');
+
+            const jsonData = {
+                "message": message.value,
+            };
+
+            const obj = JSON.stringify(jsonData);
+            Telegram.WebApp.sendData(obj);
+            Telegram.WebApp.close();
+        },
+    }
+
+    const user_data_form = document.querySelector('#contact');
+    user_data_form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        RKTermin.submit();
+    });
+</script>
+
+<script type="application/javascript">
+    /*
+     * This part of code is used to initialize the demo app and set up the event handlers we need.
+     */
+    RKTermin.init();
+
+    document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
+</script>
+
+</body>
+</html>
