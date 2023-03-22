@@ -8,8 +8,12 @@
     <meta name="MobileOptimized" content="176"/>
     <meta name="HandheldFriendly" content="True"/>
     <meta name="robots" content="noindex,nofollow"/>
-    <title></title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Link to jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Link to jQuery UI library -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/smoothness/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
     <style>
         body {
             --bg-color: var(--tg-theme-bg-color, #fff);
@@ -191,6 +195,33 @@
             font-size: 12px;
         }
     </style>
+    <script>
+        $(document).ready(function(){
+            // Set default values for start and end dates
+            const startDate = new Date();
+            const endDate = new Date();
+            endDate.setMonth(endDate.getMonth() + 6);
+            // Initialize date pickers
+            $("#wanted_period_start").datepicker({
+                dateFormat: "dd.mm.yy",
+                minDate: startDate,
+                maxDate: endDate,
+                onSelect: function(selectedDate) {
+                    // Set the minDate for end date picker when start date is selected
+                    $("#wanted_period_end").datepicker("option", "minDate", selectedDate);
+                }
+            }).datepicker("setDate", startDate);
+            $("#wanted_period_end").datepicker({
+                dateFormat: "dd.mm.yy",
+                minDate: startDate,
+                maxDate: endDate,
+                onSelect: function(selectedDate) {
+                    // Set the maxDate for start date picker when end date is selected
+                    $("#wanted_period_start").datepicker("option", "maxDate", selectedDate);
+                }
+            }).datepicker("setDate", endDate);
+        });
+    </script>
 </head>
 
 <body class="" style="visibility: hidden;">
@@ -219,7 +250,13 @@
         <label for="phone">Phone Number (Without '+'):</label>
         <input type="text" id="phone" name="phone" placeholder="055123456" required>
 
-<!--        <button type="submit">Submit</button>-->
+        <label for="wanted_period_start">Wanted from (dd.mm.yyyy):</label>
+        <input type="text" id="wanted_period_start" name="wanted_period_start" pattern="\d{2}\.\d{2}\.\d{4}" required>
+
+        <label for="wanted_period_end">Wanted till (dd.mm.yyyy):</label>
+        <input type="text" id="wanted_period_end" name="wanted_period_end" pattern="\d{2}\.\d{2}\.\d{4}" required>
+
+                <button type="submit">Submit</button>
     </form>
 
     <div id="errors"></div>
@@ -253,8 +290,11 @@
             const passportNumberInput = document.querySelector('#passport_number');
             const emailInput = document.querySelector('#email');
             const phoneInput = document.querySelector('#phone');
-            const errorsDiv = document.querySelector('#errors');
+            const wantedPeriodStart = document.querySelector('#wanted_period_start');
+            const wantedPeriodEnd = document.querySelector('#wanted_period_end');
+            const wantedPeriod = wantedPeriodStart.value + "-" + wantedPeriodEnd.value;
 
+            const errorsDiv = document.querySelector('#errors');
             const errors = [];
 
             if (!validateName(firstNameInput.value)) {
@@ -291,6 +331,7 @@
                             "passport": passportNumberInput.value,
                             "email": emailInput.value,
                             "phone": phoneInput.value,
+                            "wanted_period": wantedPeriod,
                         };
 
                         const obj = JSON.stringify(jsonData);
