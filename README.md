@@ -2,6 +2,9 @@
 
 This repository contains the source code for a Telegram Mini WebApp that allows users to fill out and apply for a visa through a Telegram bot.
 
+![image](https://github.com/qwerity/rktermin/assets/2309929/f1b4051a-b45a-40d8-addc-3dd3ecc8d022)
+
+
 ## Features
 
 - User-friendly interface for visa application.
@@ -29,10 +32,6 @@ This file contains the form for visa application. It includes fields for first n
 ### contact_admin.html
 
 This file contains the form for user feedback. It allows users to provide feedback or report issues with a text area field.
-
-## Styling
-
-The application uses custom CSS for styling, ensuring a responsive and user-friendly interface. It also uses theme variables from the Telegram WebApp API for consistent theming.
 
 ## Scripts
 
